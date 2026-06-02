@@ -4,6 +4,7 @@ import z from "zod";
 
 const validationObject = z.object({
 	PORT: z.string().min(0).max(65535),
+	DATABASE_URL: z.string().min(1),
 });
 
 @Injectable()
@@ -21,5 +22,9 @@ export class AppConfigService {
 
 	get port(): number {
 		return Number(this.configService.get("PORT"));
+	}
+
+	get databaseUrl(): string {
+		return this.configService.get("DATABASE_URL");
 	}
 }

@@ -1,0 +1,9 @@
+generator client {
+  provider     = "prisma-client"
+  moduleFormat = "cjs"
+  output       = "../src/@generated/prisma-client"
+}
+
+datasource db {
+  provider = "sqlite"
+}
