@@ -107,6 +107,20 @@ Prefer early returns over nested conditions — braces are enforced by Biome (`u
 
 ## NestJS Patterns
 
+### Logging
+
+Use `console` — do not use NestJS `Logger`:
+
+```typescript
+// CORRECT
+console.log('message')
+console.error('something failed', error)
+
+// WRONG
+import { Logger } from '@nestjs/common'
+this.logger.log('message')
+```
+
 ### Service Structure
 
 ```typescript
