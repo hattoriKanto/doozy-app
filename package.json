@@ -1,0 +1,9 @@
+{
+	"dependencies": {
+		"npm-check-updates": "22.2.1"
+	},
+	"scripts": {
+		"bump": "npx npm-check-updates -u && npm install && npm run bump:backend",
+		"bump:backend": "cd backend && npx npm-check-updates -u && npm install"
+	}
+}
