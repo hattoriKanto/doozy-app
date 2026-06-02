@@ -1,4 +1,4 @@
-import { IsIn, IsNotEmpty, IsOptional, IsString } from "class-validator";
+import { IsIn, IsNotEmpty, IsString } from "class-validator";
 import { TodoStatus } from "../../@generated/prisma-client/enums";
 
 export class CreateTodoDto {
@@ -6,7 +6,6 @@ export class CreateTodoDto {
 	@IsNotEmpty()
 	title!: string;
 
-	@IsOptional()
 	@IsString()
 	description!: string | null;
 }
