@@ -1,7 +1,7 @@
 import { Injectable } from "@nestjs/common";
 import { Todo, TodoStatus } from "../@generated/prisma-client/client";
 import { PrismaService } from "../database/prisma.service";
-import { CreateTodoDto } from "./dtos/create-todo.dto";
+import { CreateTodoDto } from "./dtos/todo.dto";
 
 type CreateTodoArgs = {
 	data: CreateTodoDto;

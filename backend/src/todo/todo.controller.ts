@@ -8,8 +8,8 @@ import {
   Post,
   Query,
 } from '@nestjs/common';
-import { Todo, TodoStatus } from '../@generated/prisma-client/client';
-import { CreateTodoDto } from './dtos/create-todo.dto';
+import { Todo } from '../@generated/prisma-client/client';
+import { CreateTodoDto, UpdateTodoDto } from './dtos/todo.dto';
 import { TodoService } from './todo.service';
 
 @Controller('api/todos')
@@ -29,7 +29,7 @@ export class TodoController {
   @Patch(':id')
   updateTodo(
     @Param('id') id: string,
-    @Query('status') status: TodoStatus,
+    @Query() { status }: UpdateTodoDto,
   ): Promise<Todo> {
     return this.service.updateTodo({ id, status });
   }
