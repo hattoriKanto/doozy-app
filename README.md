@@ -84,6 +84,12 @@ PORT=3000
 DATABASE_URL="file:./dev.db"
 ```
 
+Create a `frontend/.env` file:
+
+```
+VITE_API_BASE_URL=http://localhost:3000/api
+```
+
 ### 3. Generate Prisma client and run migrations
 
 ```bash
