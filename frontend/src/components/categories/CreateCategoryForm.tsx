@@ -49,7 +49,7 @@ export const CreateCategoryForm: React.FC<CreateCategoryFormProps> = ({
           {...register('title', { required: 'Category name is required' })}
           type="text"
           placeholder="New category name"
-          className="rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+          className="rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none bg-white"
         />
         {errors.title && (
           <span className="mt-1 text-xs text-red-600">
