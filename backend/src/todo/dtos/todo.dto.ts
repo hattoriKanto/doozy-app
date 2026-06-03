@@ -4,6 +4,7 @@ import {
   IsArray,
   IsIn,
   IsNotEmpty,
+  IsOptional,
   IsString,
   ValidateNested,
 } from 'class-validator'
@@ -14,6 +15,7 @@ export class CreateTodoDto {
   @IsNotEmpty()
   title!: string
 
+  @IsOptional()
   @IsString()
   description!: string | null
 
