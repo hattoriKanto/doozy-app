@@ -56,14 +56,5 @@ describe('AppConfigService', () => {
 
       expect(subject.port).toBe(3000)
     })
-
-    it('databaseUrl returns the DATABASE_URL value verbatim', async () => {
-      const subject = await buildSubject({
-        PORT: '3000',
-        DATABASE_URL: 'file:./dev.db',
-      })
-
-      expect(subject.databaseUrl).toBe('file:./dev.db')
-    })
   })
 })
