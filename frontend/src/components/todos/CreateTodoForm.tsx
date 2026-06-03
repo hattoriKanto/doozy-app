@@ -81,7 +81,7 @@ export const CreateTodoForm: React.FC<CreateTodoFormProps> = ({
           <select
             {...register('categoryId', { required: 'Category is required' })}
             defaultValue=""
-            className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+            className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none cursor-pointer"
           >
             <option value="" disabled hidden>
               {'Select category'}
@@ -101,7 +101,7 @@ export const CreateTodoForm: React.FC<CreateTodoFormProps> = ({
         <button
           type="submit"
           disabled={isSubmitting}
-          className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
+          className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50 cursor-pointer"
         >
           {isSubmitting ? 'Creating...' : 'Create Task'}
         </button>
