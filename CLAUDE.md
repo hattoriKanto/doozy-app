@@ -273,6 +273,10 @@ afterEach(() => {
 
 ## Prisma Patterns
 
+### Schema Conventions
+
+- Relation fields use PascalCase (matching the model name), not camelCase — e.g. `Category` and `Todos`, not `category` and `todos`. This is intentional project style; do not "fix" it to match Prisma's default convention.
+
 ### Data Fetching Rules
 
 - Sort data on the backend via `orderBy` — never sort on the frontend what the DB can sort
