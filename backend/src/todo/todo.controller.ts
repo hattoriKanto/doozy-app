@@ -6,6 +6,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
 } from '@nestjs/common';
 import { Todo } from '../@generated/prisma-client/client';
 import { CreateTodoDto, UpdateTodosDto } from './dtos/todo.dto';
@@ -16,8 +17,8 @@ export class TodoController {
   constructor(private readonly service: TodoService) {}
 
   @Get()
-  getTodos(): Promise<Todo[]> {
-    return this.service.getTodos();
+  getTodos(@Query('categoryId') categoryId: string): Promise<Todo[]> {
+    return this.service.getTodos({ categoryId });
   }
 
   @Post()
