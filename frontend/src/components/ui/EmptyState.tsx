@@ -1,0 +1,28 @@
+type EmptyStateProps = {
+  message?: string
+}
+
+export const EmptyState: React.FC<EmptyStateProps> = ({
+  message = 'No tasks yet',
+}) => {
+  return (
+    <div className="flex flex-col items-center justify-center py-16 text-gray-400">
+      <svg
+        className="mb-4 h-16 w-16"
+        fill="none"
+        viewBox="0 0 24 24"
+        stroke="currentColor"
+        strokeWidth={1}
+        role="img"
+        aria-label="No tasks"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2"
+        />
+      </svg>
+      <p className="text-lg">{message}</p>
+    </div>
+  )
+}
