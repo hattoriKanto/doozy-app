@@ -71,7 +71,7 @@ export const App: React.FC = () => {
     [removeTodo],
   )
 
-  const { completeTodo, completeTodos, pendingDeletionIds } = useDelayedDelete({
+  const { completeTodos, pendingDeletionIds } = useDelayedDelete({
     onStatusChange: handleStatusChange,
     onBatchStatusChange: handleBatchStatusChange,
     onDelete: handleDelete,
@@ -89,26 +89,6 @@ export const App: React.FC = () => {
       return todo
     },
     [selectedCategoryId, addTodo],
-  )
-
-  const handleToggleComplete = useCallback(
-    (todoId: string) => {
-      const todo = todos.find((t) => t.id === todoId)
-      if (!todo || pendingDeletionIds.has(todoId)) {
-        return
-      }
-      if (todo.status === 'notCompleted') {
-        completeTodo(todoId).catch(() => {
-          toast.error('Failed to complete task')
-        })
-        setSelectedTodoIds((prev) => {
-          const next = new Set(prev)
-          next.delete(todoId)
-          return next
-        })
-      }
-    },
-    [todos, pendingDeletionIds, completeTodo],
   )
 
   const handleImmediateDelete = useCallback(
@@ -156,6 +136,8 @@ export const App: React.FC = () => {
     try {
       await completeTodos(idsToComplete)
       setSelectedTodoIds(new Set())
+    } catch {
+      toast.error('Failed to complete tasks')
     } finally {
       setIsBulkProcessing(false)
     }
@@ -203,7 +185,6 @@ export const App: React.FC = () => {
         selectedTodoIds={selectedTodoIds}
         onToggleSelect={handleToggleSelect}
         onToggleSelectAll={handleToggleSelectAll}
-        onToggleComplete={handleToggleComplete}
         onDelete={handleImmediateDelete}
       />
     </AppLayout>

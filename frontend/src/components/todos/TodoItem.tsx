@@ -8,7 +8,6 @@ type TodoItemProps = {
   isPendingDeletion: boolean
   isSelected: boolean
   onToggleSelect: () => void
-  onToggleComplete: () => void
   onDelete: () => void
 }
 
@@ -20,7 +19,6 @@ export const TodoItem: React.FC<TodoItemProps> = ({
   isPendingDeletion,
   isSelected,
   onToggleSelect,
-  onToggleComplete,
   onDelete,
 }) => {
   return (
@@ -38,14 +36,6 @@ export const TodoItem: React.FC<TodoItemProps> = ({
         onChange={onToggleSelect}
         className="h-4 w-4 shrink-0 cursor-pointer rounded border-gray-300 text-blue-600 focus:ring-blue-500 disabled:cursor-not-allowed"
         aria-label="Select task"
-      />
-      <input
-        type="checkbox"
-        checked={isCompleted}
-        disabled={isPendingDeletion}
-        onChange={onToggleComplete}
-        className="h-4 w-4 shrink-0 cursor-pointer rounded border-gray-300 text-green-600 accent-green-600 focus:ring-green-500 disabled:cursor-not-allowed"
-        aria-label="Mark as completed"
       />
       <div className="min-w-0 flex-1">
         <p
@@ -74,7 +64,7 @@ export const TodoItem: React.FC<TodoItemProps> = ({
         type="button"
         onClick={onDelete}
         disabled={isPendingDeletion}
-        className="shrink-0 rounded p-1 text-gray-400 hover:bg-red-50 hover:text-red-600 disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
+        className="shrink-0 cursor-pointer rounded p-1 text-gray-400 hover:bg-red-50 hover:text-red-600 disabled:cursor-not-allowed disabled:opacity-50"
         aria-label="Delete task"
       >
         <svg

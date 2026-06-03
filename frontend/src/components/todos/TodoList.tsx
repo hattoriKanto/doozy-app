@@ -13,7 +13,6 @@ type TodoListProps = {
   selectedTodoIds: Set<string>
   onToggleSelect: (todoId: string) => void
   onToggleSelectAll: () => void
-  onToggleComplete: (todoId: string) => void
   onDelete: (todoId: string) => void
 }
 
@@ -26,7 +25,6 @@ export const TodoList: React.FC<TodoListProps> = ({
   selectedTodoIds,
   onToggleSelect,
   onToggleSelectAll,
-  onToggleComplete,
   onDelete,
 }) => {
   if (loading) {
@@ -70,9 +68,6 @@ export const TodoList: React.FC<TodoListProps> = ({
           isSelected={selectedTodoIds.has(todo.id)}
           onToggleSelect={() => {
             onToggleSelect(todo.id)
-          }}
-          onToggleComplete={() => {
-            onToggleComplete(todo.id)
           }}
           onDelete={() => {
             onDelete(todo.id)
