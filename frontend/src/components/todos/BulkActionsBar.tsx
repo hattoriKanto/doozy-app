@@ -24,14 +24,14 @@ export const BulkActionsBar: React.FC<BulkActionsBarProps> = ({
         type="button"
         onClick={onMarkAsDone}
         disabled={isProcessing}
-        className="rounded-md bg-blue-600 px-3 py-1 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
+        className="cursor-pointer rounded-md bg-blue-600 px-3 py-1 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
       >
         {isProcessing ? 'Processing...' : 'Mark as done'}
       </button>
       <button
         type="button"
         onClick={onClearSelection}
-        className="text-sm text-blue-600 hover:text-blue-800"
+        className="cursor-pointer text-sm text-blue-600 hover:text-blue-800"
       >
         {'Clear'}
       </button>

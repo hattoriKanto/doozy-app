@@ -172,7 +172,7 @@ const BatchUndoToast: React.FC<BatchUndoToastProps> = ({ count, onUndo }) => {
       <span>{`${count} tasks completed`}</span>
       <button
         type="button"
-        className="font-semibold text-blue-600 hover:text-blue-800"
+        className="cursor-pointer font-semibold text-blue-600 hover:text-blue-800"
         onClick={onUndo}
       >
         {'Undo'}
