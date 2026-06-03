@@ -61,7 +61,7 @@ export const TodoItem: React.FC<TodoItemProps> = ({
         type="button"
         onClick={onDelete}
         disabled={isPendingDeletion}
-        className="shrink-0 rounded p-1 text-gray-400 hover:bg-red-50 hover:text-red-600 disabled:cursor-not-allowed disabled:opacity-50"
+        className="shrink-0 rounded p-1 text-gray-400 hover:bg-red-50 hover:text-red-600 disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
         aria-label="Delete task"
       >
         <svg
