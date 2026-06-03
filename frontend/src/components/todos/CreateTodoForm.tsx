@@ -1,7 +1,8 @@
 import axios from 'axios'
-import { useForm } from 'react-hook-form'
+import { Controller, useForm } from 'react-hook-form'
 import { toast } from 'react-toastify'
 import type { Category, CreateTodoPayload, Todo } from '../../types/todo'
+import { CategorySelect } from '../categories/CategorySelect'
 
 type CreateTodoFormValues = {
   title: string
@@ -22,6 +23,7 @@ export const CreateTodoForm: React.FC<CreateTodoFormProps> = ({
     register,
     handleSubmit,
     reset,
+    control,
     formState: { errors, isSubmitting },
   } = useForm<CreateTodoFormValues>({
     defaultValues: { title: '', description: '', categoryId: '' },
@@ -56,52 +58,44 @@ export const CreateTodoForm: React.FC<CreateTodoFormProps> = ({
     >
       <h2 className="mb-3 text-sm font-semibold text-gray-700">{'New Task'}</h2>
       <div className="flex flex-col gap-3">
-        <div>
-          <input
-            {...register('title', { required: 'Task title is required' })}
-            type="text"
-            placeholder="What needs to be done?"
-            className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
-          />
-          {errors.title && (
-            <span className="mt-1 block text-xs text-red-600">
-              {errors.title.message}
-            </span>
+        <input
+          {...register('title', { required: 'Task title is required' })}
+          type="text"
+          placeholder="What needs to be done?"
+          className="w-full rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+        />
+        {errors.title && (
+          <span className="mt-1 block text-xs text-red-600">
+            {errors.title.message}
+          </span>
+        )}
+        <textarea
+          {...register('description')}
+          placeholder="Description (optional)"
+          rows={2}
+          className="w-full resize-none rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
+        />
+        <Controller
+          name="categoryId"
+          control={control}
+          rules={{ required: 'Category is required' }}
+          render={({ field }) => (
+            <CategorySelect
+              categories={categories}
+              value={field.value}
+              onChange={field.onChange}
+            />
           )}
-        </div>
-        <div>
-          <textarea
-            {...register('description')}
-            placeholder="Description (optional)"
-            rows={2}
-            className="w-full resize-none rounded-lg border border-gray-300 px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none"
-          />
-        </div>
-        <div>
-          <select
-            {...register('categoryId', { required: 'Category is required' })}
-            defaultValue=""
-            className="w-full rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none cursor-pointer"
-          >
-            <option value="" disabled hidden>
-              {'Select category'}
-            </option>
-            {categories.map((category) => (
-              <option key={category.id} value={category.id}>
-                {category.title}
-              </option>
-            ))}
-          </select>
-          {errors.categoryId && (
-            <span className="mt-1 block text-xs text-red-600">
-              {errors.categoryId.message}
-            </span>
-          )}
-        </div>
+        />
+        {errors.categoryId && (
+          <span className="mt-1 block text-xs text-red-600">
+            {errors.categoryId.message}
+          </span>
+        )}
         <button
           type="submit"
           disabled={isSubmitting}
-          className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50 cursor-pointer"
+          className="cursor-pointer rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white hover:bg-blue-700 disabled:opacity-50"
         >
           {isSubmitting ? 'Creating...' : 'Create Task'}
         </button>
