@@ -35,7 +35,8 @@ frontend/                # React SPA
 
 - [NestJS](https://nestjs.com/) - REST API framework
 - [Prisma](https://www.prisma.io/) - ORM with SQLite via better-sqlite3
-- [Zod](https://zod.dev/) - Schema validation
+- [Zod](https://zod.dev/) - Environment variable validation
+- [class-validator](https://github.com/typestack/class-validator) + [class-transformer](https://github.com/typestack/class-transformer) - DTO validation
 - [Jest](https://jestjs.io/) - Unit testing
 - TypeScript 6
 
