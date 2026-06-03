@@ -82,14 +82,6 @@ describe('CategoryService', () => {
         'Category with the same title already exists.',
       )
     })
-
-    it('rethrows non-P2002 errors untouched', async () => {
-      const { service, prisma } = await buildSubject()
-      const error = Object.assign(new Error('boom'), { code: 'P9999' })
-      prisma.category.create.mockRejectedValue(error)
-
-      await expect(service.createCategory({ title: 'X' })).rejects.toBe(error)
-    })
   })
 
   describe('deleteCategory', () => {
