@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { BadRequestException, Injectable } from "@nestjs/common";
 import { Todo, TodoStatus } from "../@generated/prisma-client/client";
 import { PrismaService } from "../database/prisma.service";
 import { CreateTodoDto } from "./dtos/todo.dto";
@@ -6,6 +6,8 @@ import { CreateTodoDto } from "./dtos/todo.dto";
 type GetTodosArgs = {
 	categoryId?: string;
 };
+
+const maxTodosPerCategory = 5;
 
 type CreateTodoArgs = {
 	data: CreateTodoDto;
@@ -36,8 +38,16 @@ export class TodoService {
 	};
 
 	createTodo = ({ data }: CreateTodoArgs): Promise<Todo> => {
-		return this.prisma.todo.create({
-			data,
+		return this.prisma.$transaction(async (tx) => {
+			const count = await tx.todo.count({
+				where: { categoryId: data.categoryId },
+			});
+			if (count >= maxTodosPerCategory) {
+				throw new BadRequestException(
+					"A category can contain at most 5 tasks.",
+				);
+			}
+			return tx.todo.create({ data });
 		});
 	};
 
