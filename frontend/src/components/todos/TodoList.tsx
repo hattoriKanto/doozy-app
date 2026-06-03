@@ -47,7 +47,7 @@ export const TodoList: React.FC<TodoListProps> = ({
   return (
     <div className="flex flex-col gap-2">
       {selectableTodos.length > 0 && (
-        <label className="flex items-center gap-2 px-1 py-1 text-sm text-gray-500">
+        <label className="flex items-center gap-2 px-1 py-1 text-sm text-gray-500 cursor-pointer">
           <input
             type="checkbox"
             checked={allSelected}
