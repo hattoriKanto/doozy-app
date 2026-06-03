@@ -6,6 +6,8 @@ type TodoItemProps = {
   categoryName: string
   isCompleted: boolean
   isPendingDeletion: boolean
+  isSelected: boolean
+  onToggleSelect: () => void
   onToggleComplete: () => void
   onDelete: () => void
 }
@@ -16,6 +18,8 @@ export const TodoItem: React.FC<TodoItemProps> = ({
   categoryName,
   isCompleted,
   isPendingDeletion,
+  isSelected,
+  onToggleSelect,
   onToggleComplete,
   onDelete,
 }) => {
@@ -24,14 +28,23 @@ export const TodoItem: React.FC<TodoItemProps> = ({
       className={cn(
         'flex items-center gap-3 rounded-lg border border-gray-200 bg-white px-4 py-3 transition-opacity duration-300',
         isPendingDeletion && 'opacity-50',
+        isSelected && !isPendingDeletion && 'border-blue-300 bg-blue-50/30',
       )}
     >
+      <input
+        type="checkbox"
+        checked={isSelected}
+        disabled={isPendingDeletion}
+        onChange={onToggleSelect}
+        className="h-4 w-4 shrink-0 cursor-pointer rounded border-gray-300 text-blue-600 focus:ring-blue-500 disabled:cursor-not-allowed"
+        aria-label="Select task"
+      />
       <input
         type="checkbox"
         checked={isCompleted}
         disabled={isPendingDeletion}
         onChange={onToggleComplete}
-        className="h-4 w-4 shrink-0 cursor-pointer rounded border-gray-300 text-blue-600 focus:ring-blue-500 disabled:cursor-not-allowed"
+        className="h-4 w-4 shrink-0 cursor-pointer rounded border-gray-300 text-green-600 accent-green-600 focus:ring-green-500 disabled:cursor-not-allowed"
         aria-label="Mark as completed"
       />
       <div className="min-w-0 flex-1">
