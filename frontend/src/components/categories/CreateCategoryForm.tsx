@@ -28,7 +28,11 @@ export const CreateCategoryForm: React.FC<CreateCategoryFormProps> = ({
       toast.success('Category created')
     } catch (err) {
       if (axios.isAxiosError(err) && err.response?.status === 400) {
-        setError('title', { message: err.response.data.message })
+        setError('title', {
+          message: Array.isArray(err.response.data.message)
+            ? err.response.data.message.join(', ')
+            : err.response.data.message,
+        })
       } else {
         toast.error('Failed to create category')
       }
@@ -56,7 +60,7 @@ export const CreateCategoryForm: React.FC<CreateCategoryFormProps> = ({
       <button
         type="submit"
         disabled={isSubmitting}
-        className="rounded-lg bg-gray-600 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700 disabled:opacity-50"
+        className="rounded-lg bg-gray-600 px-4 py-2 text-sm font-medium text-white hover:bg-gray-700 disabled:opacity-50 cursor-pointer"
       >
         {isSubmitting ? 'Adding...' : 'Add'}
       </button>

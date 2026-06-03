@@ -98,7 +98,9 @@ export const App: React.FC = () => {
         return
       }
       if (todo.status === 'notCompleted') {
-        completeTodo(todoId)
+        completeTodo(todoId).catch(() => {
+          toast.error('Failed to complete task')
+        })
         setSelectedTodoIds((prev) => {
           const next = new Set(prev)
           next.delete(todoId)

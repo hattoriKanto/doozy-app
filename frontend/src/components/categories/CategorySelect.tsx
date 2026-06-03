@@ -21,7 +21,7 @@ export const CategorySelect: React.FC<CategorySelectProps> = ({
   return (
     <select
       className={cn(
-        'rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none',
+        'rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none cursor-pointer',
         className,
       )}
       value={value}

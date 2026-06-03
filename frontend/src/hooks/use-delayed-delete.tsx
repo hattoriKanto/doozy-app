@@ -66,11 +66,11 @@ export const useDelayedDelete = ({
       setPendingDeletionIds((prev) => new Set(prev).add(todoId))
 
       toast(
-        <div className="flex items-center justify-between gap-4">
+        <div className="flex items-center justify-between gap-4 w-full px-4">
           <span>{'Task completed'}</span>
           <button
             type="button"
-            className="font-semibold text-blue-600 hover:text-blue-800"
+            className="font-semibold text-blue-600 hover:text-blue-800 cursor-pointer"
             onClick={() => {
               cancelCompletion(todoId)
             }}
@@ -88,7 +88,9 @@ export const useDelayedDelete = ({
               return
             }
             removePending(todoId)
-            onDelete(todoId)
+            onDelete(todoId).catch(() => {
+              toast.error('Failed to delete task')
+            })
           },
         },
       )
