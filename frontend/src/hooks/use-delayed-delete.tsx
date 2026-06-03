@@ -65,7 +65,9 @@ export const useDelayedDelete = ({
               return
             }
             removePending(todoId)
-            onDelete(todoId)
+            onDelete(todoId).catch(() => {
+              toast.error('Failed to delete task')
+            })
           },
         },
       )
