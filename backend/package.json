@@ -1,72 +1,71 @@
 {
-	"name": "backend",
-	"version": "0.0.1",
-	"description": "",
-	"author": "",
-	"private": true,
-	"license": "UNLICENSED",
-	"scripts": {
-		"build": "nest build",
-		"format": "biome format --write .",
-		"start": "nest start",
-		"start:dev": "nest start --watch",
-		"start:debug": "nest start --debug --watch",
-		"start:prod": "node dist/main",
-		"lint": "biome check --fix .",
-		"lint:check": "biome check .",
-		"test": "jest"
-	},
-	"dependencies": {
-		"@nestjs/common": "11.1.24",
-		"@nestjs/config": "4.0.4",
-		"@nestjs/core": "11.1.24",
-		"@nestjs/platform-express": "11.1.24",
-		"@prisma/adapter-better-sqlite3": "7.8.0",
-		"@prisma/client": "7.8.0",
-		"class-transformer": "0.5.1",
-		"class-validator": "0.15.1",
-		"reflect-metadata": "0.2.2",
-		"rxjs": "7.8.2",
-		"zod": "4.4.3"
-	},
-	"devDependencies": {
-		"@biomejs/biome": "2.4.16",
-		"@nestjs/cli": "11.0.21",
-		"@nestjs/schematics": "11.1.0",
-		"@nestjs/testing": "11.1.24",
-		"@types/better-sqlite3": "7.6.13",
-		"@types/express": "5.0.6",
-		"@types/jest": "30.0.0",
-		"@types/supertest": "7.2.0",
-		"dotenv": "17.4.2",
-		"jest": "30.4.2",
-		"prisma": "7.8.0",
-		"source-map-support": "0.5.21",
-		"supertest": "7.2.2",
-		"ts-jest": "29.4.11",
-		"ts-loader": "9.6.0",
-		"ts-node": "10.9.2",
-		"tsconfig-paths": "4.2.0",
-		"typescript": "6.0.3"
-	},
-	"prisma": {
-		"schema": "prisma/schema.prisma"
-	},
-	"jest": {
-		"moduleFileExtensions": [
-			"js",
-			"json",
-			"ts"
-		],
-		"rootDir": "src",
-		"testRegex": ".*\\.spec\\.ts$",
-		"transform": {
-			"^.+\\.(t|j)s$": "ts-jest"
-		},
-		"collectCoverageFrom": [
-			"**/*.(t|j)s"
-		],
-		"coverageDirectory": "../coverage",
-		"testEnvironment": "node"
-	}
+  "name": "backend",
+  "version": "0.0.1",
+  "description": "",
+  "author": "",
+  "private": true,
+  "license": "UNLICENSED",
+  "scripts": {
+    "build": "nest build",
+    "format": "biome format --write --config-path=.. .",
+    "start": "nest start",
+    "start:dev": "nest start --watch",
+    "start:debug": "nest start --debug --watch",
+    "start:prod": "node dist/main",
+    "lint": "biome check --fix --config-path=.. .",
+    "lint:check": "biome check --config-path=.. .",
+    "test": "jest"
+  },
+  "dependencies": {
+    "@nestjs/common": "11.1.24",
+    "@nestjs/config": "4.0.4",
+    "@nestjs/core": "11.1.24",
+    "@nestjs/platform-express": "11.1.24",
+    "@prisma/adapter-better-sqlite3": "7.8.0",
+    "@prisma/client": "7.8.0",
+    "class-transformer": "0.5.1",
+    "class-validator": "0.15.1",
+    "reflect-metadata": "0.2.2",
+    "rxjs": "7.8.2",
+    "zod": "4.4.3"
+  },
+  "devDependencies": {
+    "@nestjs/cli": "11.0.21",
+    "@nestjs/schematics": "11.1.0",
+    "@nestjs/testing": "11.1.24",
+    "@types/better-sqlite3": "7.6.13",
+    "@types/express": "5.0.6",
+    "@types/jest": "30.0.0",
+    "@types/supertest": "7.2.0",
+    "dotenv": "17.4.2",
+    "jest": "30.4.2",
+    "prisma": "7.8.0",
+    "source-map-support": "0.5.21",
+    "supertest": "7.2.2",
+    "ts-jest": "29.4.11",
+    "ts-loader": "9.6.0",
+    "ts-node": "10.9.2",
+    "tsconfig-paths": "4.2.0",
+    "typescript": "6.0.3"
+  },
+  "prisma": {
+    "schema": "prisma/schema.prisma"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "js",
+      "json",
+      "ts"
+    ],
+    "rootDir": "src",
+    "testRegex": ".*\\.spec\\.ts$",
+    "transform": {
+      "^.+\\.(t|j)s$": "ts-jest"
+    },
+    "collectCoverageFrom": [
+      "**/*.(t|j)s"
+    ],
+    "coverageDirectory": "../coverage",
+    "testEnvironment": "node"
+  }
 }

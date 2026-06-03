@@ -1,62 +1,60 @@
-import { BadRequestException, Injectable } from "@nestjs/common";
-import { Todo } from "../@generated/prisma-client/client";
-import { PrismaService } from "../database/prisma.service";
-import { CreateTodoDto, UpdateTodoItemDto } from "./dtos/todo.dto";
+import { BadRequestException, Injectable } from '@nestjs/common'
+import { Todo } from '../@generated/prisma-client/client'
+import { PrismaService } from '../database/prisma.service'
+import { CreateTodoDto, UpdateTodoItemDto } from './dtos/todo.dto'
 
 type GetTodosArgs = {
-	categoryId?: string;
-};
+  categoryId?: string
+}
 
-const maxTodosPerCategory = 5;
+const maxTodosPerCategory = 5
 
 type CreateTodoArgs = {
-	data: CreateTodoDto;
-};
+  data: CreateTodoDto
+}
 
 type UpdateTodosArgs = {
-	todos: UpdateTodoItemDto[];
-};
+  todos: UpdateTodoItemDto[]
+}
 
 type DeleteTodoArgs = {
-	id: string;
-};
+  id: string
+}
 
 @Injectable()
 export class TodoService {
-	constructor(private readonly prisma: PrismaService) {}
+  constructor(private readonly prisma: PrismaService) {}
 
-	getTodos = ({ categoryId }: GetTodosArgs): Promise<Todo[]> => {
-		return this.prisma.todo.findMany({
-			orderBy: { createdAt: "desc" },
-			where: { categoryId },
-		});
-	};
+  getTodos = ({ categoryId }: GetTodosArgs): Promise<Todo[]> => {
+    return this.prisma.todo.findMany({
+      orderBy: { createdAt: 'desc' },
+      where: { categoryId },
+    })
+  }
 
-	createTodo = ({ data }: CreateTodoArgs): Promise<Todo> => {
-		return this.prisma.$transaction(async (tx) => {
-			const count = await tx.todo.count({
-				where: { categoryId: data.categoryId },
-			});
-			if (count >= maxTodosPerCategory) {
-				throw new BadRequestException(
-					"A category can contain at most 5 tasks.",
-				);
-			}
-			return tx.todo.create({ data });
-		});
-	};
+  createTodo = ({ data }: CreateTodoArgs): Promise<Todo> => {
+    return this.prisma.$transaction(async (tx) => {
+      const count = await tx.todo.count({
+        where: { categoryId: data.categoryId },
+      })
+      if (count >= maxTodosPerCategory) {
+        throw new BadRequestException('A category can contain at most 5 tasks.')
+      }
+      return tx.todo.create({ data })
+    })
+  }
 
-	updateTodos = ({ todos }: UpdateTodosArgs): Promise<Todo[]> => {
-		return this.prisma.$transaction(
-			todos.map(({ id, status }) =>
-				this.prisma.todo.update({ where: { id }, data: { status } }),
-			),
-		);
-	};
+  updateTodos = ({ todos }: UpdateTodosArgs): Promise<Todo[]> => {
+    return this.prisma.$transaction(
+      todos.map(({ id, status }) =>
+        this.prisma.todo.update({ where: { id }, data: { status } }),
+      ),
+    )
+  }
 
-	deleteTodo = ({ id }: DeleteTodoArgs): Promise<Todo> => {
-		return this.prisma.todo.delete({
-			where: { id },
-		});
-	};
+  deleteTodo = ({ id }: DeleteTodoArgs): Promise<Todo> => {
+    return this.prisma.todo.delete({
+      where: { id },
+    })
+  }
 }
