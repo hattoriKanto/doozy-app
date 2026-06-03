@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import { toast } from 'react-toastify'
 import type { TodoStatus } from '../types/todo'
 
@@ -13,10 +13,7 @@ export const useDelayedDelete = ({
   onStatusChange,
   onDelete,
 }: UseDelayedDeleteArgs) => {
-  const timersRef = useRef<Map<string, ReturnType<typeof setTimeout>>>(
-    new Map(),
-  )
-  const toastIdsRef = useRef<Map<string, string | number>>(new Map())
+  const cancelledIdsRef = useRef<Set<string>>(new Set())
   const [pendingDeletionIds, setPendingDeletionIds] = useState<Set<string>>(
     new Set(),
   )
@@ -31,16 +28,7 @@ export const useDelayedDelete = ({
 
   const cancelCompletion = useCallback(
     async (todoId: string) => {
-      const timerId = timersRef.current.get(todoId)
-      if (timerId) {
-        clearTimeout(timerId)
-        timersRef.current.delete(todoId)
-      }
-      const toastId = toastIdsRef.current.get(todoId)
-      if (toastId !== undefined) {
-        toast.dismiss(toastId)
-        toastIdsRef.current.delete(todoId)
-      }
+      cancelledIdsRef.current.add(todoId)
       removePending(todoId)
       await onStatusChange(todoId, 'notCompleted')
     },
@@ -50,18 +38,11 @@ export const useDelayedDelete = ({
   const completeTodo = useCallback(
     async (todoId: string) => {
       await onStatusChange(todoId, 'completed')
+      cancelledIdsRef.current.delete(todoId)
 
       setPendingDeletionIds((prev) => new Set(prev).add(todoId))
 
-      const timerId = setTimeout(async () => {
-        timersRef.current.delete(todoId)
-        toastIdsRef.current.delete(todoId)
-        removePending(todoId)
-        await onDelete(todoId)
-      }, completionDelayMs)
-      timersRef.current.set(todoId, timerId)
-
-      const toastId = toast(
+      toast(
         <div className="flex items-center justify-between gap-4">
           <span>{'Task completed'}</span>
           <button
@@ -78,21 +59,19 @@ export const useDelayedDelete = ({
           autoClose: completionDelayMs,
           closeOnClick: false,
           closeButton: true,
+          onClose: () => {
+            if (cancelledIdsRef.current.has(todoId)) {
+              cancelledIdsRef.current.delete(todoId)
+              return
+            }
+            removePending(todoId)
+            onDelete(todoId)
+          },
         },
       )
-      toastIdsRef.current.set(todoId, toastId)
     },
     [onStatusChange, onDelete, cancelCompletion, removePending],
   )
-
-  useEffect(() => {
-    const timers = timersRef.current
-    return () => {
-      for (const timerId of timers.values()) {
-        clearTimeout(timerId)
-      }
-    }
-  }, [])
 
   return { completeTodo, pendingDeletionIds, cancelCompletion }
 }
