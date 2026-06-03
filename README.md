@@ -38,7 +38,7 @@ frontend/                # React SPA
 - [Zod](https://zod.dev/) - Environment variable validation
 - [class-validator](https://github.com/typestack/class-validator) + [class-transformer](https://github.com/typestack/class-transformer) - DTO validation
 - [Jest](https://jestjs.io/) - Unit testing
-- TypeScript 6
+- TypeScript
 
 **Frontend**
 
