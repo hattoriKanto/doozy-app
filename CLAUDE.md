@@ -37,6 +37,7 @@
 4. Check the same module's existing files for established patterns
 
 - Types/inputs: reuse existing DTOs instead of declaring inline types
+- Never declare a private service type that duplicates a DTO's shape — import and reference the DTO class directly (e.g. `todos: UpdateTodoItemDto[]`, not a re-declared `{ id: string; status: TodoStatus }[]`)
 - Never edit files under `backend/src/@generated/` — these are auto-generated
 
 ---
@@ -271,6 +272,10 @@ afterEach(() => {
 ---
 
 ## Prisma Patterns
+
+### Schema Conventions
+
+- Relation fields use PascalCase (matching the model name), not camelCase — e.g. `Category` and `Todos`, not `category` and `todos`. This is intentional project style; do not "fix" it to match Prisma's default convention.
 
 ### Data Fetching Rules
 

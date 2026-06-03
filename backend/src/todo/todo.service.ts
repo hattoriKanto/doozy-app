@@ -1,7 +1,7 @@
 import { BadRequestException, Injectable } from "@nestjs/common";
-import { Todo, TodoStatus } from "../@generated/prisma-client/client";
+import { Todo } from "../@generated/prisma-client/client";
 import { PrismaService } from "../database/prisma.service";
-import { CreateTodoDto } from "./dtos/todo.dto";
+import { CreateTodoDto, UpdateTodoItemDto } from "./dtos/todo.dto";
 
 type GetTodosArgs = {
 	categoryId?: string;
@@ -13,13 +13,8 @@ type CreateTodoArgs = {
 	data: CreateTodoDto;
 };
 
-type BulkUpdateTodoItem = {
-	id: string;
-	status: TodoStatus;
-};
-
 type UpdateTodosArgs = {
-	todos: BulkUpdateTodoItem[];
+	todos: UpdateTodoItemDto[];
 };
 
 type DeleteTodoArgs = {
