@@ -1,5 +1,6 @@
 import { Type } from "class-transformer";
 import {
+	ArrayMinSize,
 	IsArray,
 	IsIn,
 	IsNotEmpty,
@@ -30,6 +31,7 @@ export class UpdateTodoItemDto {
 
 export class UpdateTodosDto {
 	@IsArray()
+	@ArrayMinSize(1)
 	@ValidateNested({ each: true })
 	@Type(() => UpdateTodoItemDto)
 	todos!: UpdateTodoItemDto[];
