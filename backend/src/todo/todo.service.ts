@@ -3,6 +3,10 @@ import { Todo, TodoStatus } from "../@generated/prisma-client/client";
 import { PrismaService } from "../database/prisma.service";
 import { CreateTodoDto } from "./dtos/todo.dto";
 
+type GetTodosArgs = {
+	categoryId?: string;
+};
+
 type CreateTodoArgs = {
 	data: CreateTodoDto;
 };
@@ -24,8 +28,11 @@ type DeleteTodoArgs = {
 export class TodoService {
 	constructor(private readonly prisma: PrismaService) {}
 
-	getTodos = (): Promise<Todo[]> => {
-		return this.prisma.todo.findMany();
+	getTodos = ({ categoryId }: GetTodosArgs): Promise<Todo[]> => {
+		return this.prisma.todo.findMany({
+			orderBy: { createdAt: "desc" },
+			where: { categoryId },
+		});
 	};
 
 	createTodo = ({ data }: CreateTodoArgs): Promise<Todo> => {

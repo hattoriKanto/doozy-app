@@ -15,6 +15,10 @@ export class CreateTodoDto {
 
 	@IsString()
 	description!: string | null;
+
+	@IsString()
+	@IsNotEmpty()
+	categoryId!: string;
 }
 
 export class UpdateTodoItemDto {
