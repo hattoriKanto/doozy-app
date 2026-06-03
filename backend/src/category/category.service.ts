@@ -15,8 +15,8 @@ export class CategoryService {
 		return this.prisma.category.findMany({ orderBy: { createdAt: "desc" } });
 	};
 
-	createCategory = async ({ title }: CreateCategoryDto): Promise<Category> => {
-		return this.prisma.category.create({ data: { title } }).catch((error) => {
+	createCategory = async (data: CreateCategoryDto): Promise<Category> => {
+		return this.prisma.category.create({ data }).catch((error) => {
 			if (error.code === "P2002") {
 				throw new BadRequestException(
 					"Category with the same title already exists.",
