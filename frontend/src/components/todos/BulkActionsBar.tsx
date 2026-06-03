@@ -31,7 +31,8 @@ export const BulkActionsBar: React.FC<BulkActionsBarProps> = ({
       <button
         type="button"
         onClick={onClearSelection}
-        className="cursor-pointer text-sm text-blue-600 hover:text-blue-800"
+        disabled={isProcessing}
+        className="cursor-pointer text-sm text-blue-600 hover:text-blue-800 disabled:opacity-50"
       >
         {'Clear'}
       </button>
