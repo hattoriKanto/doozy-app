@@ -44,7 +44,7 @@
 
 ## Project Overview
 
-NestJS REST API backend with Prisma (SQLite) and Biome for linting/formatting.
+Full-stack todo app: NestJS REST API backend with Prisma (SQLite), React frontend with Vite + TailwindCSS, and Biome for linting/formatting.
 
 ## Repository Structure
 
@@ -58,16 +58,28 @@ backend/
     app.module.ts
   prisma/
     schema.prisma
+frontend/
+  src/
+    api/             # Axios client and API functions
+    components/      # React components (PascalCase files)
+    hooks/           # Custom hooks (kebab-case files)
+    types/           # TypeScript type definitions
+    utils/           # Utility functions (cn, etc.)
+    App.tsx
+    main.tsx
 ```
 
 ## Safe Commands
 
 ```bash
-cd backend && npm run start:dev    # Start dev server
+cd backend && npm run start:dev    # Start backend dev server
 cd backend && npm run lint         # Lint and fix (Biome)
 cd backend && npm run lint:check   # Lint check only
 cd backend && npm test             # Run tests (Jest)
-cd backend && npm run build        # Build
+cd backend && npm run build        # Build backend
+cd frontend && npm run dev         # Start Vite dev server
+cd frontend && npm run build       # Production build
+cd frontend && npm run preview     # Preview production build
 ```
 
 ---
@@ -232,7 +244,36 @@ const entity = await this.prisma.entity.findFirstOrThrow({ where: { id } })
 
 ---
 
+## React Patterns
+
+### Component Definition
+
+```typescript
+export const MyComponent: React.FC = () => {
+  return <div>{'Content'}</div>
+}
+```
+
+### Rules
+
+- Wrap JSX text in explicit strings: `<span>{'Hello world'}</span>`
+- No `import React` — Vite JSX transform handles it
+- Extract components to separate files — no multi-component files
+- Move constant arrays/objects outside components (not inside render)
+- Use Tailwind utility classes — no inline `style={{}}`
+- Use `cn()` from `utils/cn.ts` (clsx + tailwind-merge) for conditional class merging
+- Named exports only (no default exports, matching backend convention)
+
+### Frontend Testing
+
+- Test files: `*.test.tsx` / `*.test.ts`, colocated with source in `frontend/src/`
+- Use Vitest (Vite-native) + React Testing Library
+
+---
+
 ## File Naming
+
+### Backend
 
 - `{entity}.service.ts`
 - `{entity}.controller.ts`
@@ -240,6 +281,14 @@ const entity = await this.prisma.entity.findFirstOrThrow({ where: { id } })
 - `dto/{entity}.dto.ts`
 - `dto/{entity}-{action}.dto.ts` (e.g., `create-task-input.dto.ts`)
 - `{name}.spec.ts` (unit tests, colocated with source)
+
+### Frontend
+
+- `ComponentName.tsx` (PascalCase for components)
+- `use-hook-name.ts` (kebab-case for hooks)
+- `utility-name.ts` (kebab-case for utilities)
+- `type-name.ts` (kebab-case for type files)
+- `*.test.tsx` / `*.test.ts` (tests, colocated with source)
 
 ---
 

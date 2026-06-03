@@ -1,15 +1,16 @@
 {
-	"dependencies": {
-		"npm-check-updates": "22.2.1"
-	},
-	"devDependencies": {
-		"@biomejs/biome": "2.4.16"
-	},
-	"scripts": {
-		"format": "biome format --write .",
-		"lint": "biome check --fix .",
-		"lint:check": "biome check .",
-		"bump": "npx npm-check-updates -u && npm install && npm run bump:backend",
-		"bump:backend": "cd backend && npx npm-check-updates -u && npm install"
-	}
+  "dependencies": {
+    "npm-check-updates": "22.2.1"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.4.16"
+  },
+  "scripts": {
+    "format": "biome format --write .",
+    "lint": "biome check --fix .",
+    "lint:check": "biome check .",
+    "bump": "npx npm-check-updates -u && npm install && npm run bump:backend && npm run bump:frontend",
+    "bump:backend": "cd backend && npx npm-check-updates -u && npm install",
+    "bump:frontend": "cd frontend && npx npm-check-updates -u && npm install"
+  }
 }
