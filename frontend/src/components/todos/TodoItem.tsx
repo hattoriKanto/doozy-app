@@ -1,3 +1,4 @@
+import { Trash2 } from 'lucide-react'
 import { cn } from '../../utils/cn'
 
 type TodoItemProps = {
@@ -6,7 +7,8 @@ type TodoItemProps = {
   categoryName: string
   isCompleted: boolean
   isPendingDeletion: boolean
-  onToggleComplete: () => void
+  isSelected: boolean
+  onToggleSelect: () => void
   onDelete: () => void
 }
 
@@ -16,7 +18,8 @@ export const TodoItem: React.FC<TodoItemProps> = ({
   categoryName,
   isCompleted,
   isPendingDeletion,
-  onToggleComplete,
+  isSelected,
+  onToggleSelect,
   onDelete,
 }) => {
   return (
@@ -24,15 +27,16 @@ export const TodoItem: React.FC<TodoItemProps> = ({
       className={cn(
         'flex items-center gap-3 rounded-lg border border-gray-200 bg-white px-4 py-3 transition-opacity duration-300',
         isPendingDeletion && 'opacity-50',
+        isSelected && !isPendingDeletion && 'border-blue-300 bg-blue-50/30',
       )}
     >
       <input
         type="checkbox"
-        checked={isCompleted}
+        checked={isSelected}
         disabled={isPendingDeletion}
-        onChange={onToggleComplete}
+        onChange={onToggleSelect}
         className="h-4 w-4 shrink-0 cursor-pointer rounded border-gray-300 text-blue-600 focus:ring-blue-500 disabled:cursor-not-allowed"
-        aria-label="Mark as completed"
+        aria-label="Select task"
       />
       <div className="min-w-0 flex-1">
         <p
@@ -61,23 +65,10 @@ export const TodoItem: React.FC<TodoItemProps> = ({
         type="button"
         onClick={onDelete}
         disabled={isPendingDeletion}
-        className="shrink-0 rounded p-1 text-gray-400 hover:bg-red-50 hover:text-red-600 disabled:cursor-not-allowed disabled:opacity-50 cursor-pointer"
+        className="shrink-0 cursor-pointer rounded p-1 text-gray-400 hover:bg-red-50 hover:text-red-600 disabled:cursor-not-allowed disabled:opacity-50"
         aria-label="Delete task"
       >
-        <svg
-          className="h-4 w-4"
-          fill="none"
-          viewBox="0 0 24 24"
-          stroke="currentColor"
-          strokeWidth={2}
-          aria-hidden="true"
-        >
-          <path
-            strokeLinecap="round"
-            strokeLinejoin="round"
-            d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"
-          />
-        </svg>
+        <Trash2 className="h-4 w-4" />
       </button>
     </div>
   )

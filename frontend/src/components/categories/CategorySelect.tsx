@@ -1,5 +1,6 @@
+import { useMemo } from 'react'
 import type { Category } from '../../types/todo'
-import { cn } from '../../utils/cn'
+import { Select } from '../ui/Select'
 
 type CategorySelectProps = {
   categories: Category[]
@@ -18,29 +19,25 @@ export const CategorySelect: React.FC<CategorySelectProps> = ({
   className,
   includeAllOption = false,
 }) => {
+  const options = useMemo(() => {
+    const placeholderOption = includeAllOption
+      ? { value: '', label: 'All categories' }
+      : { value: '', label: placeholder, disabled: true, hidden: true }
+
+    const categoryOptions = categories.map((c) => ({
+      value: c.id,
+      label: c.title,
+    }))
+
+    return [placeholderOption, ...categoryOptions]
+  }, [categories, includeAllOption, placeholder])
+
   return (
-    <select
-      className={cn(
-        'rounded-lg border border-gray-300 bg-white px-3 py-2 text-sm focus:border-blue-500 focus:ring-1 focus:ring-blue-500 focus:outline-none cursor-pointer',
-        className,
-      )}
+    <Select
+      options={options}
       value={value}
-      onChange={(event) => {
-        onChange(event.target.value)
-      }}
-    >
-      {includeAllOption ? (
-        <option value="">{'All categories'}</option>
-      ) : (
-        <option value="" disabled>
-          {placeholder}
-        </option>
-      )}
-      {categories.map((category) => (
-        <option key={category.id} value={category.id}>
-          {category.title}
-        </option>
-      ))}
-    </select>
+      onChange={onChange}
+      className={className}
+    />
   )
 }
