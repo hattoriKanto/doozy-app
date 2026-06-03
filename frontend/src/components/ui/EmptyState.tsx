@@ -13,8 +13,7 @@ export const EmptyState: React.FC<EmptyStateProps> = ({
         viewBox="0 0 24 24"
         stroke="currentColor"
         strokeWidth={1}
-        role="img"
-        aria-label="No tasks"
+        aria-hidden="true"
       >
         <path
           strokeLinecap="round"
