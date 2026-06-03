@@ -7,9 +7,13 @@ type CreateTodoArgs = {
 	data: CreateTodoDto;
 };
 
-type UpdateTodoArgs = {
+type BulkUpdateTodoItem = {
 	id: string;
 	status: TodoStatus;
+};
+
+type UpdateTodosArgs = {
+	todos: BulkUpdateTodoItem[];
 };
 
 type DeleteTodoArgs = {
@@ -30,11 +34,12 @@ export class TodoService {
 		});
 	};
 
-	updateTodo = ({ id, status }: UpdateTodoArgs): Promise<Todo> => {
-		return this.prisma.todo.update({
-			where: { id },
-			data: { status },
-		});
+	updateTodos = ({ todos }: UpdateTodosArgs): Promise<Todo[]> => {
+		return this.prisma.$transaction(
+			todos.map(({ id, status }) =>
+				this.prisma.todo.update({ where: { id }, data: { status } }),
+			),
+		);
 	};
 
 	deleteTodo = ({ id }: DeleteTodoArgs): Promise<Todo> => {

@@ -8,7 +8,7 @@ import {
   Post,
 } from '@nestjs/common';
 import { Todo } from '../@generated/prisma-client/client';
-import { CreateTodoDto, UpdateTodoDto } from './dtos/todo.dto';
+import { CreateTodoDto, UpdateTodosDto } from './dtos/todo.dto';
 import { TodoService } from './todo.service';
 
 @Controller('api/todos')
@@ -25,12 +25,9 @@ export class TodoController {
     return this.service.createTodo({ data });
   }
 
-  @Patch(':id')
-  updateTodo(
-    @Param('id') id: string,
-    @Body() { status }: UpdateTodoDto,
-  ): Promise<Todo> {
-    return this.service.updateTodo({ id, status });
+  @Patch()
+  updateTodos(@Body() { todos }: UpdateTodosDto): Promise<Todo[]> {
+    return this.service.updateTodos({ todos });
   }
 
   @Delete(':id')
