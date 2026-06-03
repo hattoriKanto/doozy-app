@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import { toast } from 'react-toastify'
 import type { TodoStatus } from '../types/todo'
 
@@ -15,10 +15,7 @@ export const useDelayedDelete = ({
   onBatchStatusChange,
   onDelete,
 }: UseDelayedDeleteArgs) => {
-  const timersRef = useRef<Map<string, ReturnType<typeof setTimeout>>>(
-    new Map(),
-  )
-  const toastIdsRef = useRef<Map<string, string | number>>(new Map())
+  const cancelledIdsRef = useRef<Set<string>>(new Set())
   const [pendingDeletionIds, setPendingDeletionIds] = useState<Set<string>>(
     new Set(),
   )
@@ -31,18 +28,19 @@ export const useDelayedDelete = ({
     })
   }, [])
 
+  const removePendingBatch = useCallback((todoIds: string[]) => {
+    setPendingDeletionIds((prev) => {
+      const next = new Set(prev)
+      for (const todoId of todoIds) {
+        next.delete(todoId)
+      }
+      return next
+    })
+  }, [])
+
   const cancelCompletion = useCallback(
     async (todoId: string) => {
-      const timerId = timersRef.current.get(todoId)
-      if (timerId) {
-        clearTimeout(timerId)
-        timersRef.current.delete(todoId)
-      }
-      const toastId = toastIdsRef.current.get(todoId)
-      if (toastId !== undefined) {
-        toast.dismiss(toastId)
-        toastIdsRef.current.delete(todoId)
-      }
+      cancelledIdsRef.current.add(todoId)
       removePending(todoId)
       await onStatusChange(todoId, 'notCompleted')
     },
@@ -50,43 +48,24 @@ export const useDelayedDelete = ({
   )
 
   const cancelBatchCompletion = useCallback(
-    async (todoIds: string[], batchToastId: string | number) => {
+    async (todoIds: string[]) => {
       for (const todoId of todoIds) {
-        const timerId = timersRef.current.get(todoId)
-        if (timerId) {
-          clearTimeout(timerId)
-          timersRef.current.delete(todoId)
-        }
-        toastIdsRef.current.delete(todoId)
+        cancelledIdsRef.current.add(todoId)
       }
-      toast.dismiss(batchToastId)
-      setPendingDeletionIds((prev) => {
-        const next = new Set(prev)
-        for (const todoId of todoIds) {
-          next.delete(todoId)
-        }
-        return next
-      })
+      removePendingBatch(todoIds)
       await onBatchStatusChange(todoIds, 'notCompleted')
     },
-    [onBatchStatusChange],
+    [onBatchStatusChange, removePendingBatch],
   )
 
   const completeTodo = useCallback(
     async (todoId: string) => {
       await onStatusChange(todoId, 'completed')
+      cancelledIdsRef.current.delete(todoId)
 
       setPendingDeletionIds((prev) => new Set(prev).add(todoId))
 
-      const timerId = setTimeout(async () => {
-        timersRef.current.delete(todoId)
-        toastIdsRef.current.delete(todoId)
-        removePending(todoId)
-        await onDelete(todoId)
-      }, completionDelayMs)
-      timersRef.current.set(todoId, timerId)
-
-      const toastId = toast(
+      toast(
         <div className="flex items-center justify-between gap-4">
           <span>{'Task completed'}</span>
           <button
@@ -103,9 +82,16 @@ export const useDelayedDelete = ({
           autoClose: completionDelayMs,
           closeOnClick: false,
           closeButton: true,
+          onClose: () => {
+            if (cancelledIdsRef.current.has(todoId)) {
+              cancelledIdsRef.current.delete(todoId)
+              return
+            }
+            removePending(todoId)
+            onDelete(todoId)
+          },
         },
       )
-      toastIdsRef.current.set(todoId, toastId)
     },
     [onStatusChange, onDelete, cancelCompletion, removePending],
   )
@@ -123,6 +109,10 @@ export const useDelayedDelete = ({
 
       await onBatchStatusChange(todoIds, 'completed')
 
+      for (const todoId of todoIds) {
+        cancelledIdsRef.current.delete(todoId)
+      }
+
       setPendingDeletionIds((prev) => {
         const next = new Set(prev)
         for (const todoId of todoIds) {
@@ -131,50 +121,40 @@ export const useDelayedDelete = ({
         return next
       })
 
-      for (const todoId of todoIds) {
-        const timerId = setTimeout(async () => {
-          timersRef.current.delete(todoId)
-          removePending(todoId)
-          await onDelete(todoId)
-        }, completionDelayMs)
-        timersRef.current.set(todoId, timerId)
-      }
-
-      const batchToastId = toast(
+      toast(
         <BatchUndoToast
           count={todoIds.length}
           onUndo={() => {
-            cancelBatchCompletion(todoIds, batchToastId)
+            cancelBatchCompletion(todoIds)
           }}
         />,
         {
           autoClose: completionDelayMs,
           closeOnClick: false,
           closeButton: true,
+          onClose: () => {
+            const idsToDelete = todoIds.filter(
+              (id) => !cancelledIdsRef.current.has(id),
+            )
+            for (const todoId of todoIds) {
+              cancelledIdsRef.current.delete(todoId)
+            }
+            removePendingBatch(idsToDelete)
+            for (const todoId of idsToDelete) {
+              onDelete(todoId)
+            }
+          },
         },
       )
-
-      for (const todoId of todoIds) {
-        toastIdsRef.current.set(todoId, batchToastId)
-      }
     },
     [
       completeTodo,
       onBatchStatusChange,
       onDelete,
       cancelBatchCompletion,
-      removePending,
+      removePendingBatch,
     ],
   )
-
-  useEffect(() => {
-    const timers = timersRef.current
-    return () => {
-      for (const timerId of timers.values()) {
-        clearTimeout(timerId)
-      }
-    }
-  }, [])
 
   return { completeTodo, completeTodos, pendingDeletionIds, cancelCompletion }
 }
