@@ -1,4 +1,4 @@
-import { Injectable } from "@nestjs/common";
+import { BadRequestException, Injectable } from "@nestjs/common";
 import { Category } from "../@generated/prisma-client/client";
 import { PrismaService } from "../database/prisma.service";
 
@@ -18,9 +18,19 @@ export class CategoryService {
 		return this.prisma.category.findMany({ orderBy: { createdAt: "desc" } });
 	};
 
-	createCategory = ({ title }: CreateCategoryArgs): Promise<Category> => {
-		return this.prisma.category.create({ data: { title } });
-	};
+	async createCategory({
+		title,
+	}: CreateCategoryArgs): Promise<Category | void> {
+		return this.prisma.category.create({ data: { title } }).catch((error) => {
+			if (error.code === "P2002") {
+				throw new BadRequestException(
+					"Category with the same title already exists.",
+				);
+			}
+
+			throw error;
+		});
+	}
 
 	deleteCategory = ({ id }: DeleteCategoryArgs): Promise<Category> => {
 		return this.prisma.category.delete({ where: { id } });
