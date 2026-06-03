@@ -30,7 +30,7 @@ model Todo {
 model Category {
   id String @id @default(uuid())
 
-  title String
+  title String @unique
 
   Todos Todo[]
 

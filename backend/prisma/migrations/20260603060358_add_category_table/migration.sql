@@ -30,3 +30,6 @@ DROP TABLE "Todo";
 ALTER TABLE "new_Todo" RENAME TO "Todo";
 PRAGMA foreign_keys=ON;
 PRAGMA defer_foreign_keys=OFF;
+
+-- CreateIndex
+CREATE UNIQUE INDEX "Category_title_key" ON "Category"("title");
