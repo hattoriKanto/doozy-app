@@ -1,10 +1,7 @@
 import { BadRequestException, Injectable } from "@nestjs/common";
 import { Category } from "../@generated/prisma-client/client";
 import { PrismaService } from "../database/prisma.service";
-
-type CreateCategoryArgs = {
-	title: string;
-};
+import { CreateCategoryDto } from "./dtos/category.dto";
 
 type DeleteCategoryArgs = {
 	id: string;
@@ -18,9 +15,7 @@ export class CategoryService {
 		return this.prisma.category.findMany({ orderBy: { createdAt: "desc" } });
 	};
 
-	async createCategory({
-		title,
-	}: CreateCategoryArgs): Promise<Category | void> {
+	createCategory = async ({ title }: CreateCategoryDto): Promise<Category> => {
 		return this.prisma.category.create({ data: { title } }).catch((error) => {
 			if (error.code === "P2002") {
 				throw new BadRequestException(
@@ -30,7 +25,7 @@ export class CategoryService {
 
 			throw error;
 		});
-	}
+	};
 
 	deleteCategory = ({ id }: DeleteCategoryArgs): Promise<Category> => {
 		return this.prisma.category.delete({ where: { id } });
