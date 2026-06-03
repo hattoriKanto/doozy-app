@@ -38,7 +38,11 @@ export const CreateTodoForm: React.FC<CreateTodoFormProps> = ({
       toast.success('Task created')
     } catch (err) {
       if (axios.isAxiosError(err) && err.response?.status === 400) {
-        toast.error(err.response.data.message)
+        toast.error(
+          Array.isArray(err.response.data.message)
+            ? err.response.data.message.join(', ')
+            : err.response.data.message,
+        )
       } else {
         toast.error('Failed to create task')
       }

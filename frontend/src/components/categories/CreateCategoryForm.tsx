@@ -28,7 +28,11 @@ export const CreateCategoryForm: React.FC<CreateCategoryFormProps> = ({
       toast.success('Category created')
     } catch (err) {
       if (axios.isAxiosError(err) && err.response?.status === 400) {
-        setError('title', { message: err.response.data.message })
+        setError('title', {
+          message: Array.isArray(err.response.data.message)
+            ? err.response.data.message.join(', ')
+            : err.response.data.message,
+        })
       } else {
         toast.error('Failed to create category')
       }
