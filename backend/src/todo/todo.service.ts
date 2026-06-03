@@ -1,15 +1,14 @@
 import { Injectable } from "@nestjs/common";
-import { Todo, TodoStatus } from "../@generated/prisma-client/client";
+import { Todo } from "../@generated/prisma-client/client";
 import { PrismaService } from "../database/prisma.service";
-import { CreateTodoDto } from "./dtos/todo.dto";
+import { CreateTodoDto, UpdateTodoItemDto } from "./dtos/todo.dto";
 
 type CreateTodoArgs = {
 	data: CreateTodoDto;
 };
 
-type UpdateTodoArgs = {
-	id: string;
-	status: TodoStatus;
+type UpdateTodosArgs = {
+	todos: UpdateTodoItemDto[];
 };
 
 type DeleteTodoArgs = {
@@ -30,11 +29,12 @@ export class TodoService {
 		});
 	};
 
-	updateTodo = ({ id, status }: UpdateTodoArgs): Promise<Todo> => {
-		return this.prisma.todo.update({
-			where: { id },
-			data: { status },
-		});
+	updateTodos = ({ todos }: UpdateTodosArgs): Promise<Todo[]> => {
+		return this.prisma.$transaction(
+			todos.map(({ id, status }) =>
+				this.prisma.todo.update({ where: { id }, data: { status } }),
+			),
+		);
 	};
 
 	deleteTodo = ({ id }: DeleteTodoArgs): Promise<Todo> => {
